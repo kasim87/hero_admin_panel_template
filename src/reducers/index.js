@@ -7,7 +7,7 @@ const initialState = {
     filteredHeroes: []
 }
 
-const reducer = (state = initialState, action) => {
+function reducer(state = initialState, action) {
     switch (action.type) {
         case 'HEROES_FETCHING':
             return {

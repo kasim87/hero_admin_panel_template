@@ -1,5 +1,3 @@
-
-
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
 // в общее состояние и отображаться в списке + фильтроваться
@@ -9,8 +7,38 @@
 // Дополнительно:
 // Элементы <option></option> желательно сформировать на базе
 // данных из фильтров
+import { useHttp } from "../../hooks/http.hook";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuidv4 } from 'uuid'
 
-const HeroesAddForm = () => {
+import { heroCreated } from "../../actions";
+
+function HeroesAddForm() {
+    const [heroName, setHeroName] = useState('')
+    const [heroDesc, setHeroDesc] = useState('')
+    const [heroElement, setHeroElement] = useState('')
+
+    const {filters, filtersLoadingStatus} = useSelector(state => state)
+    const dispatch = useDispatch()
+    const {request} = useHttp()
+
+function omSubmitHandler(e) {
+    e.preventDefault()
+
+    const newHero = {
+        id: uuidv4(),
+        name: heroName,
+        description: heroDesc,
+        element: heroElement
+    }
+
+    request('http//http://localhost:3000/heroes', 'POST', JSON.stringify(newHero))
+        .then(res => console.log(res, 'отправка успешна'))
+        .then(dispatch(heroCreated(newHero)))
+        .catch(err => console.log(err))
+}
+
     return (
         <form className="border p-4 shadow-lg rounded">
             <div className="mb-3">
