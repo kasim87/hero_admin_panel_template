@@ -23,24 +23,46 @@ function HeroesAddForm() {
     const dispatch = useDispatch()
     const {request} = useHttp()
 
-function omSubmitHandler(e) {
-    e.preventDefault()
+    function omSubmitHandler(e) {
+        e.preventDefault()
 
-    const newHero = {
-        id: uuidv4(),
-        name: heroName,
-        description: heroDesc,
-        element: heroElement
+        const newHero = {
+            id: uuidv4(),
+            name: heroName,
+            description: heroDesc,
+            element: heroElement
+        }
+
+        request('http//http://localhost:3000/heroes', 'POST', JSON.stringify(newHero))
+            .then(res => console.log(res, 'отправка успешна'))
+            .then(dispatch(heroCreated(newHero)))
+            .catch(err => console.log(err))
+
+        setHeroName('')
+        setHeroDesc('')
+        setHeroElement('')
     }
 
-    request('http//http://localhost:3000/heroes', 'POST', JSON.stringify(newHero))
-        .then(res => console.log(res, 'отправка успешна'))
-        .then(dispatch(heroCreated(newHero)))
-        .catch(err => console.log(err))
-}
+    function renderFilters(filters, status) {
+        if (status === 'loading') {
+            return <option>загрузка элементов</option>
+        } else if (status === 'error') {
+            return <option>ошибка загрузки</option>
+        }
+
+        if (filters && filters.length > 0) {
+            return filters.map(({name, label})) => {
+                if (name === 'all') return
+
+                return <option key={name} value={name}>{label}</option>
+            }
+        }
+    }
+
+
 
     return (
-        <form className="border p-4 shadow-lg rounded">
+        <form className="border p-4 shadow-lg rounded" onSubmit={omSubmitHandler}>
             <div className="mb-3">
                 <label htmlFor="name" className="form-label fs-4">Имя нового героя</label>
                 <input 
@@ -49,7 +71,10 @@ function omSubmitHandler(e) {
                     name="name" 
                     className="form-control" 
                     id="name" 
-                    placeholder="Как меня зовут?"/>
+                    placeholder="Как меня зовут?"
+                    value={heroName}
+                    onChange={(e) => setHeroName(e.target.value)}
+                />
             </div>
 
             <div className="mb-3">
@@ -61,6 +86,8 @@ function omSubmitHandler(e) {
                     id="text" 
                     placeholder="Что я умею?"
                     style={{"height": '130px'}}/>
+                    value={heroDesc}
+                    onChange={(e) => setHeroDesc(e.target.value)}
             </div>
 
             <div className="mb-3">
