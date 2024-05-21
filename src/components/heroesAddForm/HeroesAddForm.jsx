@@ -10,15 +10,7 @@ function HeroesAddForm() {
     const [heroDesc, setHeroDesc] = useState('')
     const [heroElement, setHeroElement] = useState('')
 
-    const filters = useSelector(state => {
-        if (state.activeFilter === 'all') {
-            return state.heroes
-        } else {
-            return state.heroes.filter(item => item.element === state.activeFilter)
-        }
-    })
-    
-    const filtersLoadingStatus = useSelector(state => state.filtersLoadingStatus)
+    const { filters, filtersLoadingStatus } = useSelector(state => state.filters)
     const dispatch = useDispatch()
     const {request} = useHttp()
 
@@ -32,7 +24,7 @@ function HeroesAddForm() {
             element: heroElement
         }
 
-        request('http//http://localhost:3000/heroes', 'POST', JSON.stringify(newHero))
+        request('http://localhost:3001/heroes', 'POST', JSON.stringify(newHero))
             .then(res => console.log(res, 'отправка успешна'))
             .then(dispatch(heroCreated(newHero)))
             .catch(err => console.log(err))
@@ -84,25 +76,26 @@ function HeroesAddForm() {
                     className="form-control" 
                     id="text" 
                     placeholder="Что я умею?"
-                    style={{"height": '130px'}}/>
+                    style={{"height": '130px'}}
                     value={heroDesc}
                     onChange={(e) => setHeroDesc(e.target.value)}
+                />
             </div>
 
             <div className="mb-3">
                 <label htmlFor="element" className="form-label">Выбрать элемент героя</label>
-                <select 
+                <select
                     required
                     className="form-select" 
                     id="element" 
-                    name="element">
+                    name="element"
                     value={heroElement}
                     onChange={(e) => setHeroElement(e.target.value)}
+                >
                     <option value=''>Я владею элементом...</option>
                     {renderFilters(filters, filtersLoadingStatus)}
                 </select>
             </div>
-
             <button type="submit" className="btn btn-primary">Создать</button>
         </form>
     )

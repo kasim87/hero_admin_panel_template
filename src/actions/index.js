@@ -30,7 +30,7 @@ export function filtersFetched(filter) {
     }
 }
 
-export function filtesFetchingError() {
+export function filtersFetchingError() {
     return {
         type: 'FILTERS_FETCHING_ERROR'
     }
