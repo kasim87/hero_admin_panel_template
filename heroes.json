@@ -1,9 +1,21 @@
 {
   "heroes": [
     {
-      "id": "66c96379-3220-4748-921a-7db320227706",
-      "name": "laksksjk",
-      "description": "cdcdc",
+      "id": 1,
+      "name": "Первый герой",
+      "description": "Первый герой в рейтинге!",
+      "element": "fire"
+    },
+    {
+      "id": 2,
+      "name": "Неизвестный герой",
+      "description": "Скрывающийся в тени",
+      "element": "wind"
+    },
+    {
+      "id": 3,
+      "name": "Морской герой",
+      "description": "Как аквамен, но не из DC",
       "element": "water"
     }
   ],
